@@ -1,3 +1,5 @@
+//Ajouter le token en dehors d'un bloc de code pour qu'il soit accessible dans toute la page
+
 document.addEventListener("DOMContentLoaded", (event) => {
   // Récupérez le bouton "Modifier"
   let button = document.getElementById("buttonModifier");
@@ -190,7 +192,8 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // Ajouter projet avec un POST
-const form = document.querySelector("form");
+const form = document.querySelector("#form");
+console.log("form :", form);
 const title = document.querySelector("#title");
 const category = document.querySelector("#category");
 
@@ -202,7 +205,7 @@ form.addEventListener("submit", async (event) => {
   formData.append("image", file);
   formData.append("title", title.value);
   formData.append("category", category.value);
-  console.log(formData);
+  console.log("formData :", formData);
 
   try {
     const token = window.localStorage.getItem("token");
@@ -231,7 +234,7 @@ form.addEventListener("submit", async (event) => {
 //suppression projet avec un DELETE id
 function deleteProject() {
   const trashAll = document.querySelectorAll(".fa-trash-can");
-  console.log(trashAll);
+  //console.log(trashAll);
   trashAll.forEach((trash) => {
     trash.addEventListener("click", async () => {
       const id = trash.id;
@@ -248,22 +251,15 @@ function deleteProject() {
             console.log("Projet supprimé avec succès");
           } else {
             console.error("Erreur lors de la suppression du projet");
-            return response.json().then((data) => {
-              console.error(
-                `le delete a reussi voici le message : ${data.message}`
-              );
-            });
+            //changer return response.json().then((data) => {
+            // return response.json().then((data) => {
+            // console.error(
+            //   `le delete a reussi voici le message : ${data.message}`
+            //);
+            //});
           }
         }
       );
     });
-  });
-}
-if (response.ok) {
-  console.log("Projet supprimé avec succès");
-} else {
-  console.error("Erreur lors de la suppression du projet");
-  return response.json().then((data) => {
-    console.error(`le delete a reussi voici le message : ${data.message}`);
   });
 }

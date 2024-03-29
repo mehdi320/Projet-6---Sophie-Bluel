@@ -243,7 +243,7 @@ async function openModal() {
   // Vérifier si le token est présent
   if (token) {
     // Récupérer le modal
-    let modal = document.getElementById("modal");
+    let modal = document.getElementById("myModal");
 
     // Afficher le modal
     modal.style.display = "block";
