@@ -1,3 +1,15 @@
+//Token récupéré depuis le localStorage
+let token;
+
+try {
+  token = window.localStorage.getItem("token");
+  if (!token) {
+    throw new Error("Token non trouvé dans le localStorage");
+  }
+} catch (error) {
+  console.error(error);
+}
+
 //Ajouter le token en dehors d'un bloc de code pour qu'il soit accessible dans toute la page
 
 document.addEventListener("DOMContentLoaded", (event) => {
@@ -231,35 +243,28 @@ form.addEventListener("submit", async (event) => {
   displayProjects();
 });
 
-//suppression projet avec un DELETE id
-function deleteProject() {
-  const trashAll = document.querySelectorAll(".fa-trash-can");
-  //console.log(trashAll);
-  trashAll.forEach((trash) => {
-    trash.addEventListener("click", async () => {
-      const id = trash.id;
-      console.log(id);
-      const init = {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-      await fetch(`http://localhost:5678/api/works/${id}`, init).then(
-        (response) => {
-          if (response.ok) {
-            console.log("Projet supprimé avec succès");
-          } else {
-            console.error("Erreur lors de la suppression du projet");
-            //changer return response.json().then((data) => {
-            // return response.json().then((data) => {
-            // console.error(
-            //   `le delete a reussi voici le message : ${data.message}`
-            //);
-            //});
-          }
-        }
-      );
+// Fonction pour supprimer une image avec son ID
+
+async function test() {
+  const reponse = await fetch("http://localhost:5678/api/works");
+  const projects = await reponse.json();
+
+  // Obtenez la modal par son id
+  let myModal = document.getElementById("myModal");
+
+  // Parcourez chaque projet
+  for (let project of projects) {
+    // Créez l'élément icône de la poubelle
+    let trashIcon = document.createElement("i");
+    trashIcon.className = "fa-solid fa-trash-can";
+    trashIcon.id = `delete-${project.id}`;
+
+    // Ajoutez un écouteur d'événements click à l'icône de la poubelle
+    trashIcon.addEventListener("click", function () {
+      deleteImage(project.id);
     });
-  });
+
+    // Ajoutez l'icône de la poubelle à la modal
+    myModal.appendChild(trashIcon);
+  }
 }

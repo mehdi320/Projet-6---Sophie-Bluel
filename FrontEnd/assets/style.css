@@ -765,6 +765,11 @@ footer nav ul {
 	z-index: 1;
 }
 
+
+.fa-trash-can:hover {
+	cursor: pointer;
+}
+
 .black-square {
 	position: relative;
 	background-color: black;
@@ -776,9 +781,7 @@ footer nav ul {
 	display: block;
 }
 
-.fa-trash-can:hover {
-	cursor: pointer;
-}
+
 
 
 #buttonModifier {
