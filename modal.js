@@ -1,6 +1,5 @@
 //Token récupéré depuis le localStorage
 let token;
-
 try {
   token = window.localStorage.getItem("token");
   if (!token) {
@@ -34,9 +33,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 });
 
 // Fonction asynchrone pour récupérer les photos et ouvrir la modal
-
 async function openModal(token) {
-  // Ajouter le paramètre token
   try {
     // Récupérez les photos de l'API
     let response = await fetch("http://localhost:5678/api/works", {
@@ -77,15 +74,40 @@ async function openModal(token) {
       modalContent.appendChild(trashIcon);
 
       // Ajoutez un gestionnaire d'événements pour la poubelle
-      trashIcon.addEventListener("click", function () {
+      trashIcon.addEventListener("click", async function () {
         // Obtenez l'ID de la photo correspondante
         let photoId = this.getAttribute("data-photo-id");
         // Supprimez la photo correspondante
+        async function deleteProject(projectId) {
+          try {
+            let headers = {
+              Authorization: "Bearer " + token,
+            };
+            console.log(headers);
+            let response = await fetch(
+              `http://localhost:5678/api/works/${projectId}`,
+              {
+                method: "DELETE",
+                headers: headers,
+              }
+            );
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            } else {
+              console.log(`Le projet ${projectId} a été supprimé avec succès.`);
+            }
+          } catch (error) {
+            console.error("Erreur:", error);
+          }
+        }
         let photoToRemove = document.getElementById(photoId);
         if (photoToRemove) {
           photoToRemove.remove();
           // Supprimez également la poubelle correspondante
           this.remove();
+          // Supprimez le projet dans la gallerie principale
+          let projectId = photo.id; // Utilisez l'ID du projet à partir de l'objet photo
+          await deleteProject(projectId);
         }
       });
     });
@@ -101,7 +123,6 @@ async function openModal(token) {
   } catch (error) {
     console.error("Erreur:", error);
   }
-  deleteProject();
 }
 
 // Fermez la modal lorsque l'utilisateur clique en dehors de la modal
