@@ -16,13 +16,14 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let button = document.getElementById("buttonModifier");
 
   // Ajoutez un écouteur d'événements au bouton pour appeler la fonction openModal lorsqu'il est cliqué
-  button.addEventListener("click", () => {
+  button.addEventListener("click", async () => {
     // Récupérez le token du localStorage
     let token = window.localStorage.getItem("token");
 
     // Vérifiez si le token est présent
     if (token) {
-      openModal(token); // Passer le token en tant que paramètre
+      // Appeler la fonction openModal avec le token récupéré
+      await openModal(token);
     } else {
       console.error(
         "Token non défini. L'utilisateur doit être connecté pour accéder à cette fonctionnalité."
@@ -35,12 +36,16 @@ document.addEventListener("DOMContentLoaded", (event) => {
 // Fonction asynchrone pour récupérer les photos et ouvrir la modal
 async function openModal(token) {
   try {
-    // Récupérez les photos de l'API
+    // Récupérez les photos de l'API en utilisant AJAX
     let response = await fetch("http://localhost:5678/api/works", {
       headers: {
-        Authorization: `Bearer ${token}`, // Utiliser le token passé en paramètre
+        Authorization: `Bearer ${token}`,
       },
     });
+
+    if (!response.ok) {
+      throw new Error(`Erreur HTTP! Statut : ${response.status}`);
+    }
 
     let data = await response.json();
     console.log(data);
@@ -74,41 +79,62 @@ async function openModal(token) {
       modalContent.appendChild(trashIcon);
 
       // Ajoutez un gestionnaire d'événements pour la poubelle
-      trashIcon.addEventListener("click", async function () {
-        // Obtenez l'ID de la photo correspondante
-        let photoId = this.getAttribute("data-photo-id");
+      trashIcon.addEventListener("click", async (event) => {
+        // Empêchez le comportement par défaut du clic
+        event.preventDefault();
+
+        // Stockez la valeur de 'this' dans une variable
+        let trashIconElement = event.target;
+
+        // Récupérez l'ID de la photo à supprimer
+        let photoId = trashIconElement.getAttribute("data-photo-id");
+
         // Supprimez la photo correspondante
-        async function deleteProject(projectId) {
+        trashIcon.addEventListener("click", async function (event) {
           try {
-            let headers = {
-              Authorization: "Bearer " + token,
-            };
-            console.log(headers);
+            // Empêchez le comportement par défaut du clic
+            event.preventDefault();
+
+            // Effectuez la suppression depuis l'API
             let response = await fetch(
               `http://localhost:5678/api/works/${projectId}`,
               {
                 method: "DELETE",
-                headers: headers,
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
               }
             );
             if (!response.ok) {
-              throw new Error(`HTTP error! status: ${response.status}`);
-            } else {
-              console.log(`Le projet ${projectId} a été supprimé avec succès.`);
+              throw new Error(`Erreur HTTP! Statut : ${response.status}`);
+            }
+
+            // Si la suppression réussit, mettez à jour les données dans votre application
+            const indexToRemove = data.findIndex(
+              (photo) => photo.id === projectId
+            );
+            if (indexToRemove !== -1) {
+              data.splice(indexToRemove, 1);
+            }
+
+            // Mettez à jour l'interface utilisateur en supprimant l'image visuelle de la galerie
+            let photoToRemove = document.getElementById(`photo-${projectId}`);
+            if (photoToRemove) {
+              photoToRemove.remove();
+              // Supprimez également la poubelle correspondante
+              let trashIconToRemove = document.getElementById(
+                `trash-${projectId}`
+              );
+              if (trashIconToRemove) {
+                trashIconToRemove.remove();
+              }
             }
           } catch (error) {
-            console.error("Erreur:", error);
+            console.error("Erreur lors de la suppression:", error);
           }
-        }
-        let photoToRemove = document.getElementById(photoId);
-        if (photoToRemove) {
-          photoToRemove.remove();
-          // Supprimez également la poubelle correspondante
-          this.remove();
-          // Supprimez le projet dans la gallerie principale
-          let projectId = photo.id; // Utilisez l'ID du projet à partir de l'objet photo
+          let projectId = trashIconElement.getAttribute("data-project-id");
           await deleteProject(projectId);
-        }
+        });
       });
     });
 
@@ -230,22 +256,25 @@ console.log("form :", form);
 const title = document.querySelector("#title");
 const category = document.querySelector("#category");
 
+// Ajoutez un gestionnaire d'événements pour le formulaire d'ajout d'image
 form.addEventListener("submit", async (event) => {
-  event.preventDefault();
-  const file = document.querySelector('input[type="file"]').files[0];
+  event.preventDefault(); // Empêchez le comportement par défaut du formulaire
 
+  // Récupérez les informations du formulaire
+  const file = document.querySelector('input[type="file"]').files[0];
   const formData = new FormData();
   formData.append("image", file);
   formData.append("title", title.value);
   formData.append("category", category.value);
-  console.log("formData :", formData);
 
   try {
+    // Récupérez le token depuis le localStorage
     const token = window.localStorage.getItem("token");
     if (!token) {
       throw new Error("Token non trouvé dans le localStorage");
     }
 
+    // Envoyez une requête POST à l'API pour ajouter une nouvelle image
     const response = await fetch("http://localhost:5678/api/works", {
       method: "POST",
       headers: {
@@ -254,38 +283,20 @@ form.addEventListener("submit", async (event) => {
       body: formData,
     });
 
-    console.log(response); // Correction de la ligne
-    const data = await response.json();
-    console.log(data);
+    // Vérifiez si la requête a réussi
+    if (!response.ok) {
+      throw new Error(`Erreur HTTP! Statut : ${response.status}`);
+    }
+
+    // Récupérez les données de la réponse (nouvelle image ajoutée)
+    const newData = await response.json();
+
+    // Mettez à jour les données dans votre application en ajoutant la nouvelle image
+    data.push(newData);
+    displayProjects();
+
     console.log("Photo ajoutée avec succès !");
   } catch (error) {
-    console.error("Erreur:", error);
+    console.error("Erreur lors de l'ajout d'image :", error);
   }
-  displayProjects();
 });
-
-// Fonction pour supprimer une image avec son ID
-
-async function test() {
-  const reponse = await fetch("http://localhost:5678/api/works");
-  const projects = await reponse.json();
-
-  // Obtenez la modal par son id
-  let myModal = document.getElementById("myModal");
-
-  // Parcourez chaque projet
-  for (let project of projects) {
-    // Créez l'élément icône de la poubelle
-    let trashIcon = document.createElement("i");
-    trashIcon.className = "fa-solid fa-trash-can";
-    trashIcon.id = `delete-${project.id}`;
-
-    // Ajoutez un écouteur d'événements click à l'icône de la poubelle
-    trashIcon.addEventListener("click", function () {
-      deleteImage(project.id);
-    });
-
-    // Ajoutez l'icône de la poubelle à la modal
-    myModal.appendChild(trashIcon);
-  }
-}
