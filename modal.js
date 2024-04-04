@@ -74,8 +74,45 @@ async function openModal(token) {
       let trashIcon = document.createElement("i");
       trashIcon.classList.add("fa", "fa-solid", "fa-trash-can");
       trashIcon.id = `trash-${index}`; // Utilisation de l'index comme identifiant unique pour chaque icône de corbeille
+      trashIcon.addEventListener("click", () => deleteProject(photo.id)); // Ajoutez un écouteur d'événements pour supprimer le projet lors du clic
       modalContent.appendChild(trashIcon);
     });
+    async function deleteProject(projectId) {
+      try {
+        // Effectuez la suppression depuis l'API
+        let response = await fetch(
+          `http://localhost:5678/api/works/${projectId}`,
+          {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (!response.ok) {
+          throw new Error(`Erreur HTTP! Statut : ${response.status}`);
+        }
+
+        // Si la suppression réussit, mettez à jour les données dans votre application
+        const indexToRemove = data.findIndex((photo) => photo.id === projectId);
+        if (indexToRemove !== -1) {
+          data.splice(indexToRemove, 1);
+        }
+
+        // Mettez à jour l'interface utilisateur en supprimant l'image visuelle de la galerie
+        let photoToRemove = document.getElementById(`photo-${projectId}`);
+        if (photoToRemove) {
+          photoToRemove.remove();
+          // Supprimez également la poubelle correspondante
+          let trashIconToRemove = document.getElementById(`trash-${projectId}`);
+          if (trashIconToRemove) {
+            trashIconToRemove.remove();
+          }
+        }
+      } catch (error) {
+        console.error("Erreur lors de la suppression:", error);
+      }
+    }
     // Ouvrez la modal
     modal.style.display = "block";
 
