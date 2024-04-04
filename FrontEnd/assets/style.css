@@ -782,8 +782,6 @@ footer nav ul {
 }
 
 
-
-
 #buttonModifier {
 	background: none;
 	border: none;
@@ -810,4 +808,15 @@ a:visited {
 
 .container-footer {
 	margin-top: 45px
+}
+
+
+
+
+.modal-button2.disabled {
+	background: #A7A7A7;
+}
+
+.modal-button2.enabled {
+	background: #1D6154;
 }

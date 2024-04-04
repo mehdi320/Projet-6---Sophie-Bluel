@@ -163,6 +163,10 @@ let inputFile = secondModal.querySelector("input[type='file']");
 let labelFile = secondModal.querySelector("label[for='file']");
 let iconfile = secondModal.querySelector(".fa-image");
 let Pfile = secondModal.querySelector("p");
+let submitButton = secondModal.querySelector(".modal-button2"); // Ajoutez cette ligne
+
+// Ajoutez une classe CSS pour rendre le bouton grisâtre
+submitButton.classList.add("disabled");
 
 // Écoutez le changement de l'input file
 inputFile.addEventListener("change", function (e) {
@@ -176,6 +180,10 @@ inputFile.addEventListener("change", function (e) {
       labelFile.style.display = "none";
       iconfile.style.display = "none";
       Pfile.style.display = "none";
+
+      // Lorsque l'image est chargée, changez la classe CSS du bouton pour le rendre vert
+      submitButton.classList.remove("disabled");
+      submitButton.classList.add("enabled");
     };
     reader.readAsDataURL(file);
   }

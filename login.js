@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
   const loginForm = document.getElementById("loginForm");
+  console.log("script chargé");
   console.log(loginForm);
 
   loginForm.addEventListener("submit", async function (event) {
@@ -21,21 +22,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
       if (response.status === 200) {
         const data = await response.json();
-
         window.localStorage.setItem("token", data.token);
         window.localStorage.setItem("loggedIn", "true");
         window.location.replace("./index.html");
         addNavigationBar();
-      } else if (response.status === 401) {
-        throw new Error(
-          "Invalid credentials. Please check your login information."
-        );
-      } else if (response.status === 404) {
-        throw new Error("User not found.");
       } else {
-        throw new Error("Unexpected error: " + response.status);
+        window.localStorage.setItem("loggedIn", "false");
+        if (response.status === 401) {
+          throw new Error(
+            "Invalid credentials. Please check your login information."
+          );
+        } else if (response.status === 404) {
+          throw new Error("User not found.");
+        } else {
+          throw new Error("Unexpected error: " + response.status);
+        }
       }
-      window.localStorage.setItem("loggedIn", "false");
       updateModifierWord();
     } catch (error) {
       console.error(error.message);
@@ -44,8 +46,10 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 // Fonction pour mettre à jour le texte du lien "Login/Logout"
 function updateLoginLogoutText() {
+  console.log("updateLoginLogoutText called");
   const loggedIn = window.localStorage.getItem("loggedIn") === "true";
   const loginLogoutLink = document.querySelector("#login-logout a");
+  console.log(loginLogoutLink); // Ajouté pour vérifier la sélection de l'élément
 
   if (loggedIn) {
     loginLogoutLink.textContent = "Logout";
@@ -67,4 +71,7 @@ function handleLogout() {
 }
 
 // Appel initial pour mettre à jour le texte du lien au chargement de la page
-updateLoginLogoutText();
+document.addEventListener("DOMContentLoaded", function () {
+  // Votre code JavaScript ici
+  updateLoginLogoutText();
+});
