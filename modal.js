@@ -63,81 +63,19 @@ async function openModal(token) {
 
     // Videz le contenu de la modal avant d'ajouter de nouvelles images
     modalContent.innerHTML = "";
-
     // Ajoutez les photos à la modal
     data.forEach((photo, index) => {
       let img = document.createElement("img");
-      img.src = photo.imageUrl; // Utilisation de l'URL de l'image comme identifiant unique
-      img.id = `photo-${photo.imageUrl}`; // ID unique pour chaque photo basé sur l'URL de l'image
+      img.src = photo.imageUrl;
+      img.id = `photo-${index}`; // Utilisation de l'index comme identifiant unique pour chaque photo
       modalContent.appendChild(img);
 
-      // Créez la poubelle correspondante pour cette photo
+      // Créez une nouvelle icône de la corbeille
       let trashIcon = document.createElement("i");
-      trashIcon.classList.add("fa-solid", "fa-trash-can");
-      trashIcon.id = `trash-${photo.imageUrl}`; // ID unique pour chaque poubelle basé sur l'URL de l'image
-      trashIcon.setAttribute("data-photo-id", `photo-${photo.imageUrl}`); // Attribut de données pour lier à la photo
+      trashIcon.classList.add("fa", "fa-solid", "fa-trash-can");
+      trashIcon.id = `trash-${index}`; // Utilisation de l'index comme identifiant unique pour chaque icône de corbeille
       modalContent.appendChild(trashIcon);
-
-      // Ajoutez un gestionnaire d'événements pour la poubelle
-      trashIcon.addEventListener("click", async (event) => {
-        // Empêchez le comportement par défaut du clic
-        event.preventDefault();
-
-        // Stockez la valeur de 'this' dans une variable
-        let trashIconElement = event.target;
-
-        // Récupérez l'ID de la photo à supprimer
-        let photoId = trashIconElement.getAttribute("data-photo-id");
-
-        // Supprimez la photo correspondante
-        trashIcon.addEventListener("click", async function (event) {
-          try {
-            // Empêchez le comportement par défaut du clic
-            event.preventDefault();
-
-            // Effectuez la suppression depuis l'API
-            let response = await fetch(
-              `http://localhost:5678/api/works/${projectId}`,
-              {
-                method: "DELETE",
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                },
-              }
-            );
-            if (!response.ok) {
-              throw new Error(`Erreur HTTP! Statut : ${response.status}`);
-            }
-
-            // Si la suppression réussit, mettez à jour les données dans votre application
-            const indexToRemove = data.findIndex(
-              (photo) => photo.id === projectId
-            );
-            if (indexToRemove !== -1) {
-              data.splice(indexToRemove, 1);
-            }
-
-            // Mettez à jour l'interface utilisateur en supprimant l'image visuelle de la galerie
-            let photoToRemove = document.getElementById(`photo-${projectId}`);
-            if (photoToRemove) {
-              photoToRemove.remove();
-              // Supprimez également la poubelle correspondante
-              let trashIconToRemove = document.getElementById(
-                `trash-${projectId}`
-              );
-              if (trashIconToRemove) {
-                trashIconToRemove.remove();
-              }
-            }
-          } catch (error) {
-            console.error("Erreur lors de la suppression:", error);
-          }
-          let projectId = trashIconElement.getAttribute("data-project-id");
-          await deleteProject(projectId);
-        });
-      });
     });
-
     // Ouvrez la modal
     modal.style.display = "block";
 
