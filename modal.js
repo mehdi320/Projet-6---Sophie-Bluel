@@ -165,6 +165,20 @@ window.addEventListener("click", (event) => {
   }
 });
 
+// Récupérez la flèche retour
+let backButton = document.querySelector(".fa-arrow-left");
+
+// Récupérez la première modal
+let firstModal = document.getElementById("myModal");
+
+// Ajoutez un écouteur d'événements "click" à la flèche retour
+backButton.addEventListener("click", () => {
+  // Masquez la deuxième modal
+  secondModal.style.display = "none";
+  // Affichez la première modal
+  myModal.style.display = "block";
+});
+
 // Récupérez les éléments à l'intérieur de la deuxième modal
 let previewImg = secondModal.querySelector("img");
 let inputFile = secondModal.querySelector("input[type='file']");
