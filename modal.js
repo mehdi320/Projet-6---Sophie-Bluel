@@ -165,18 +165,25 @@ window.addEventListener("click", (event) => {
   }
 });
 
-// Récupérez la flèche retour
-let backButton = document.querySelector(".fa-arrow-left");
+// Fermez la modal lorsque l'utilisateur clique sur le bouton "Fermer"
+let secondcloseModal = document.getElementById("secondcloseModal");
+secondcloseModal.addEventListener("click", () => {
+  secondModal.style.display = "none";
+});
 
+// Récupérez la flèche retour
+let backButton = document.getElementById("backButton");
 // Récupérez la première modal
 let firstModal = document.getElementById("myModal");
+// Récupérez la deuxième modal
+secondModal = document.getElementById("secondModal");
 
 // Ajoutez un écouteur d'événements "click" à la flèche retour
 backButton.addEventListener("click", () => {
   // Masquez la deuxième modal
   secondModal.style.display = "none";
-  // Affichez la première modal
-  myModal.style.display = "block";
+  // Affichez la première modal en retirant le display none
+  firstModal.style.display = "block";
 });
 
 // Récupérez les éléments à l'intérieur de la deuxième modal
