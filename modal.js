@@ -65,17 +65,23 @@ async function openModal(token) {
     modalContent.innerHTML = "";
     // Ajoutez les photos à la modal
     data.forEach((photo, index) => {
+      // Créez un nouveau conteneur pour l'image et l'icône
+      let imageContainer = document.createElement("div");
+      imageContainer.className = "image-container";
+
       let img = document.createElement("img");
       img.src = photo.imageUrl;
       img.id = `photo-${index}`; // Utilisation de l'index comme identifiant unique pour chaque photo
-      modalContent.appendChild(img);
+      imageContainer.appendChild(img); // Ajoutez l'image au conteneur
 
       // Créez une nouvelle icône de la corbeille
       let trashIcon = document.createElement("i");
       trashIcon.classList.add("fa", "fa-solid", "fa-trash-can");
       trashIcon.id = `trash-${index}`; // Utilisation de l'index comme identifiant unique pour chaque icône de corbeille
       trashIcon.addEventListener("click", () => deleteProject(photo.id)); // Ajoutez un écouteur d'événements pour supprimer le projet lors du clic
-      modalContent.appendChild(trashIcon);
+      imageContainer.appendChild(trashIcon); // Ajoutez l'icône au conteneur
+
+      modalContent.appendChild(imageContainer); // Ajoutez le conteneur à la modal
     });
     async function deleteProject(projectId) {
       try {
@@ -130,6 +136,8 @@ async function openModal(token) {
 window.addEventListener("click", (event) => {
   let modal = document.getElementById("myModal");
   let modalContent = modal.querySelector(".modal-content");
+  let secondModal = document.getElementById("secondModal");
+  let ajoutPhoto = document.querySelector(".ajoutphoto");
 
   // Vérifiez si l'élément cliqué est à l'intérieur de la modal
   if (!modalContent.contains(event.target)) {
@@ -137,7 +145,7 @@ window.addEventListener("click", (event) => {
   }
 });
 
-// Récupérez le bouton "Ajouter une photo"
+/// Récupérez le bouton "Ajouter une photo"
 let addButton = document.querySelector(".modal-button");
 
 // Récupérez la deuxième modal
@@ -151,8 +159,8 @@ addButton.addEventListener("click", () => {
 
 // Fermez la deuxième modal lorsque l'utilisateur clique en dehors de la modal
 window.addEventListener("click", (event) => {
-  // Vérifiez si l'élément cliqué est la deuxième modal
-  if (event.target === secondModal) {
+  // Vérifiez si l'élément cliqué n'est pas à l'intérieur de la seconde modal
+  if (!secondModal.contains(event.target) && event.target !== addButton) {
     secondModal.style.display = "none";
   }
 });
