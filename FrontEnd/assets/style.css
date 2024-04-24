@@ -527,7 +527,7 @@ footer nav ul {
 
 
 .modal {
-	display: none;
+	/*display: none;*/
 	width: 30%;
 	position: absolute;
 	top: 100%;

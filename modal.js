@@ -11,6 +11,12 @@ try {
 
 //Ajouter le token en dehors d'un bloc de code pour qu'il soit accessible dans toute la page
 
+document.addEventListener("DOMContentLoaded", function () {
+  // Cacher la première modal au chargement de la page
+  let firstModal = document.getElementById("myModal");
+  firstModal.style.display = "none";
+});
+
 document.addEventListener("DOMContentLoaded", (event) => {
   // Récupérez le bouton "Modifier"
   let button = document.getElementById("buttonModifier");
@@ -148,9 +154,6 @@ window.addEventListener("click", (event) => {
 /// Récupérez le bouton "Ajouter une photo"
 let addButton = document.querySelector(".modal-button");
 
-// Récupérez la deuxième modal
-let secondModal = document.getElementById("secondModal");
-
 // Ajoutez un écouteur d'événements "click" au bouton "Ajouter une photo"
 addButton.addEventListener("click", () => {
   // Affichez la deuxième modal
@@ -170,21 +173,27 @@ let secondcloseModal = document.getElementById("secondcloseModal");
 secondcloseModal.addEventListener("click", () => {
   secondModal.style.display = "none";
 });
+document.addEventListener("DOMContentLoaded", function () {
+  console.log("DOMContentLoaded");
+  // Cibler l'élément avec l'ID backButton
+  let backButton = document.getElementById("backButton");
 
-// Récupérez la flèche retour
-let backButton = document.getElementById("backButton");
-// Récupérez la première modal
-let firstModal = document.getElementById("myModal");
-// Récupérez la deuxième modal
-secondModal = document.getElementById("secondModal");
-
-// Ajoutez un écouteur d'événements "click" à la flèche retour
-backButton.addEventListener("click", () => {
-  // Masquez la deuxième modal
-  secondModal.style.display = "none";
-  // Affichez la première modal en retirant le display none
-  firstModal.style.display = "block";
+  // Ajouter un gestionnaire d'événements pour le clic sur l'élément backButton
+  backButton.addEventListener("click", backToFirstModal);
+  console.log("backButton :", backButton);
 });
+
+// Fonction pour revenir à la première modal
+function backToFirstModal() {
+  // Cacher la deuxième modal
+  secondModal.style.display = "none";
+  console.log("backToFirstModal");
+  // Afficher la première modal
+  let myModal = document.getElementById("myModal");
+  console.log("myModal :", myModal);
+  myModal.style.display = "block";
+  console.log("myModal.style.display :", myModal.style.display);
+}
 
 // Récupérez les éléments à l'intérieur de la deuxième modal
 let previewImg = secondModal.querySelector("img");
