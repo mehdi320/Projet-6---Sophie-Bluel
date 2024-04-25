@@ -145,7 +145,7 @@ table {
 
 /** end reset css**/
 body {
-	max-width: 1140px;
+	max-width: 80%;
 	margin: auto;
 	font-family: 'Work Sans';
 	font-size: 14px;
@@ -322,7 +322,7 @@ footer nav ul {
 }
 
 .body {
-	max-width: 1440px;
+	max-width: 100%;
 	margin: 0 auto;
 }
 
@@ -351,8 +351,7 @@ footer nav ul {
 	display: grid;
 	justify-content: center;
 	margin-top: 20px;
-	margin-bottom: 20px;
-	/* Ajout d'une marge basse pour l'espace entre les champs */
+	margin-bottom: 350px;
 }
 
 .label {
@@ -396,15 +395,15 @@ footer nav ul {
 }
 
 
+
 .footer {
-	width: 1440px;
-	height: 60px;
-	flex-shrink: 0;
-	background-color: #FFF;
 	display: flex;
 	flex-direction: row;
 	justify-content: flex-end;
-	align-self: center;
+	width: 100%;
+	margin-right: auto;
+	margin-left: auto;
+	background-color: white;
 }
 
 .footer-text {
