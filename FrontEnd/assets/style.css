@@ -145,7 +145,7 @@ table {
 
 /** end reset css**/
 body {
-	max-width: 80%;
+	max-width: 1140px;
 	margin: auto;
 	font-family: 'Work Sans';
 	font-size: 14px;
@@ -406,6 +406,17 @@ footer nav ul {
 	background-color: white;
 }
 
+
+.footer-index {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+	background-color: white;
+	position: absolute;
+	left: 0;
+	right: 0;
+}
+
 .footer-text {
 	color: #000;
 	font-family: "Work Sans";
@@ -566,9 +577,11 @@ footer nav ul {
 	margin: 5px;
 }
 
+
+
 .modal-content .image-container .fa-trash-can {
 	position: absolute;
-	top: 10%;
+	top: 12%;
 	right: 5%;
 	color: white;
 	width: 9px;
@@ -578,8 +591,8 @@ footer nav ul {
 .modal-content .image-container .fa-trash-can::before {
 	position: absolute;
 	background-color: black;
-	width: 15px;
 	height: 15px;
+	left: 50%;
 	transform: translate(-50%, -50%);
 	display: block;
 }
