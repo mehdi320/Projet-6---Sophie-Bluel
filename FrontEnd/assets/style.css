@@ -550,6 +550,21 @@ footer nav ul {
 	background: #FFF;
 }
 
+
+.modal-backdrop {
+	display: none;
+	/* Masqué par défaut */
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	/* Opacité de 50% */
+	z-index: 0;
+	/* Moins élevé que le modal */
+}
+
 .modal-close {
 	position: absolute;
 	top: 10px;
@@ -579,23 +594,38 @@ footer nav ul {
 
 
 
+
+
 .modal-content .image-container .fa-trash-can {
 	position: absolute;
 	top: 12%;
 	right: 5%;
 	color: white;
-	width: 9px;
-	height: 11px;
+	font-size: 11px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+
+.modal-content .icon-container {
+	position: relative;
+	/* Relative pour gérer le positionnement absolu à l'intérieur */
+	display: inline-block;
+	/* Pour éviter que les éléments se chevauchent */
+	width: 15px;
+	/* Taille du conteneur pour correspondre à la taille du carré noir */
+	height: 15px;
 }
 
 .modal-content .image-container .fa-trash-can::before {
 	position: absolute;
 	background-color: black;
 	height: 15px;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	display: block;
+	width: 15px;
+	transform: translate(-70%, -60%);
 }
+
 
 .modal-content img {
 	width: auto;
