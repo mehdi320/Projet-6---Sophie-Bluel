@@ -60,15 +60,9 @@ async function openModal(token) {
     let modal = document.getElementById("myModal");
     let modalContent = modal.querySelector(".modal-content");
 
-    // Créez l'élément black-square
-    let blackSquare = document.createElement("div");
-    blackSquare.classList.add("black-square");
-
-    // Ajoutez l'élément black-square au conteneur de contenu de la modal
-    modalContent.appendChild(blackSquare);
-
     // Videz le contenu de la modal avant d'ajouter de nouvelles images
     modalContent.innerHTML = "";
+
     // Ajoutez les photos à la modal
     data.forEach((photo, index) => {
       // Créez un nouveau conteneur pour l'image et l'icône
@@ -89,6 +83,7 @@ async function openModal(token) {
 
       modalContent.appendChild(imageContainer); // Ajoutez le conteneur à la modal
     });
+
     async function deleteProject(projectId) {
       try {
         // Effectuez la suppression depuis l'API
@@ -125,13 +120,17 @@ async function openModal(token) {
         console.error("Erreur lors de la suppression:", error);
       }
     }
+
+    // Affichez le backdrop
+    document.getElementById("modalBackdrop").style.display = "block"; // Montre le backdrop
+
     // Ouvrez la modal
     modal.style.display = "block";
 
     // Fermez la modal lorsque l'utilisateur clique sur le bouton "Fermer"
     let closeButton = document.querySelector(".modal-close");
     closeButton.addEventListener("click", () => {
-      modal.style.display = "none";
+      closeModal();
     });
   } catch (error) {
     console.error("Erreur:", error);
@@ -142,12 +141,12 @@ async function openModal(token) {
 window.addEventListener("click", (event) => {
   let modal = document.getElementById("myModal");
   let modalContent = modal.querySelector(".modal-content");
-  let secondModal = document.getElementById("secondModal");
-  let ajoutPhoto = document.querySelector(".ajoutphoto");
+  let modalBackdrop = document.getElementById("modalBackdrop");
 
   // Vérifiez si l'élément cliqué est à l'intérieur de la modal
-  if (!modalContent.contains(event.target)) {
-    modal.style.display = "none";
+  if (!modalContent.contains(event.target) && event.target === modalBackdrop) {
+    modal.style.display = "none"; // Cache la modal
+    modalBackdrop.style.display = "none"; // Cache le backdrop
   }
 });
 
