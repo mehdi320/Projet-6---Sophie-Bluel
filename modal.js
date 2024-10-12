@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
   firstModal.style.display = "none";
 });
 
-document.addEventListener("DOMContentLoaded", (event) => {
+document.addEventListener("DOMContentLoaded", () => {
   // Récupérez le bouton "Modifier"
   let button = document.getElementById("buttonModifier");
 
@@ -78,7 +78,10 @@ async function openModal(token) {
       let trashIcon = document.createElement("i");
       trashIcon.classList.add("fa", "fa-solid", "fa-trash-can");
       trashIcon.id = `trash-${index}`; // Utilisation de l'index comme identifiant unique pour chaque icône de corbeille
-      trashIcon.addEventListener("click", () => deleteProject(photo.id)); // Ajoutez un écouteur d'événements pour supprimer le projet lors du clic
+      trashIcon.addEventListener("click", (event) => {
+        event.preventDefault(); // Empêche le rechargement de la page lors de la suppression
+        deleteProject(photo.id);
+      });
       imageContainer.appendChild(trashIcon); // Ajoutez l'icône au conteneur
 
       modalContent.appendChild(imageContainer); // Ajoutez le conteneur à la modal
@@ -86,6 +89,11 @@ async function openModal(token) {
 
     async function deleteProject(projectId) {
       try {
+        let token = window.localStorage.getItem("token");
+        if (!token) {
+          throw new Error("Token non trouvé ou expiré");
+        }
+
         // Effectuez la suppression depuis l'API
         let response = await fetch(
           `http://localhost:5678/api/works/${projectId}`,
@@ -96,6 +104,7 @@ async function openModal(token) {
             },
           }
         );
+
         if (!response.ok) {
           throw new Error(`Erreur HTTP! Statut : ${response.status}`);
         }
@@ -128,13 +137,27 @@ async function openModal(token) {
     modal.style.display = "block";
 
     // Fermez la modal lorsque l'utilisateur clique sur le bouton "Fermer"
-    let closeButton = document.querySelector(".modal-close");
+    let closeButton = document.createElement("span");
+    closeButton.classList.add("modal-close");
+    closeButton.innerHTML = "&times;"; // Ajoute la croix
+    modal.appendChild(closeButton); // Ajoute le bouton de fermeture dans la modal
+
+    // Ajouter un événement click pour fermer la modal
     closeButton.addEventListener("click", () => {
       closeModal();
     });
   } catch (error) {
     console.error("Erreur:", error);
   }
+}
+
+// Fonction pour fermer la modal
+function closeModal() {
+  let modal = document.getElementById("myModal");
+  let modalBackdrop = document.getElementById("modalBackdrop");
+
+  modal.style.display = "none"; // Cache la modal
+  modalBackdrop.style.display = "none"; // Cache le backdrop
 }
 
 // Fermez la modal lorsque l'utilisateur clique en dehors de la modal
@@ -145,8 +168,7 @@ window.addEventListener("click", (event) => {
 
   // Vérifiez si l'élément cliqué est à l'intérieur de la modal
   if (!modalContent.contains(event.target) && event.target === modalBackdrop) {
-    modal.style.display = "none"; // Cache la modal
-    modalBackdrop.style.display = "none"; // Cache le backdrop
+    closeModal(); // Cache la modal
   }
 });
 
@@ -155,8 +177,9 @@ let addButton = document.querySelector(".modal-button");
 
 // Ajoutez un écouteur d'événements "click" au bouton "Ajouter une photo"
 addButton.addEventListener("click", () => {
-  // Affichez la deuxième modal
-  secondModal.style.display = "block";
+  let firstModal = document.getElementById("myModal");
+  firstModal.style.display = "none"; // Cacher la première modal
+  secondModal.style.display = "block"; // Afficher la seconde modal
 });
 
 // Fermez la deuxième modal lorsque l'utilisateur clique en dehors de la modal
@@ -167,11 +190,18 @@ window.addEventListener("click", (event) => {
   }
 });
 
-// Fermez la modal lorsque l'utilisateur clique sur le bouton "Fermer"
-let secondcloseModal = document.getElementById("secondcloseModal");
-secondcloseModal.addEventListener("click", () => {
-  secondModal.style.display = "none";
+// Ajouter la croix pour la seconde modal
+let secondCloseButton = document.createElement("span");
+secondCloseButton.classList.add("modal-close");
+secondCloseButton.innerHTML = "&times;"; // Ajoute la croix
+secondModal.appendChild(secondCloseButton); // Ajoute le bouton de fermeture dans la seconde modal
+
+// Ajouter un événement click pour fermer la seconde modal
+secondCloseButton.addEventListener("click", () => {
+  secondModal.style.display = "none"; // Cache la seconde modal
+  document.getElementById("modalBackdrop").style.display = "none"; // Cache également le backdrop
 });
+
 document.addEventListener("DOMContentLoaded", function () {
   console.log("DOMContentLoaded");
   // Cibler l'élément avec l'ID backButton
@@ -206,7 +236,7 @@ let submitButton = secondModal.querySelector(".modal-button2"); // Ajoutez cette
 submitButton.classList.add("disabled");
 
 // Écoutez le changement de l'input file
-inputFile.addEventListener("change", function (e) {
+inputFile.addEventListener("change", function () {
   const file = this.files[0];
   console.log(file);
   if (file) {
