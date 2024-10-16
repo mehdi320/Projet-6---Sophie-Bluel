@@ -111,7 +111,10 @@ function createFilterButton(category) {
 function createSpan(text) {
   const span = document.createElement("span");
   span.textContent = text;
+<<<<<<< HEAD
   span.classList.add("style");
+=======
+>>>>>>> a44673910036ecdc9d404fb7d0c499174a970a17
   return span;
 }
 
