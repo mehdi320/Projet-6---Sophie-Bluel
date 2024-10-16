@@ -426,13 +426,16 @@ footer nav ul {
 	line-height: normal;
 }
 
+.style {
+	padding: 26px;
+}
+
 .filters {
-	width: 198px;
 	height: 37px;
 	border-radius: 60px;
 	border: 1px solid #1D6154;
 	background: #FFFEF8;
-	margin: 0 5px 0 0;
+	margin: 0 10px 0 0;
 	font-family: Syne;
 	font-size: 16px;
 	color: #1D6154;
@@ -593,13 +596,11 @@ footer nav ul {
 }
 
 
-
-
-
 .modal-content .image-container .fa-trash-can {
 	position: absolute;
-	top: 12%;
-	right: 5%;
+	top: 13%;
+	right: 6%;
+	left: 6%;
 	color: white;
 	font-size: 11px;
 	display: flex;
@@ -608,24 +609,21 @@ footer nav ul {
 }
 
 
-.modal-content .icon-container {
-	position: relative;
-	/* Relative pour gérer le positionnement absolu à l'intérieur */
-	display: inline-block;
-	/* Pour éviter que les éléments se chevauchent */
-	width: 15px;
-	/* Taille du conteneur pour correspondre à la taille du carré noir */
-	height: 15px;
-}
 
-.modal-content .image-container .fa-trash-can::before {
+.black-square {
 	position: absolute;
 	background-color: black;
 	height: 15px;
 	width: 15px;
-	transform: translate(-70%, -60%);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	top: 9%;
+	/* Alignez-le avec l'icône */
+	right: 5%;
+	z-index: 1;
+	/* Assurez-vous que le carré noir est derrière l'icône */
 }
-
 
 .modal-content img {
 	width: auto;
