@@ -69,22 +69,35 @@ async function openModal(token) {
       let imageContainer = document.createElement("div");
       imageContainer.className = "image-container";
 
+      // Créez et ajoutez l'image au conteneur
       let img = document.createElement("img");
       img.src = photo.imageUrl;
       img.id = `photo-${index}`; // Utilisation de l'index comme identifiant unique pour chaque photo
-      imageContainer.appendChild(img); // Ajoutez l'image au conteneur
+      imageContainer.appendChild(img);
 
-      // Créez une nouvelle icône de la corbeille
+      // Créez le conteneur du carré noir
+      let blackSquare = document.createElement("div");
+      blackSquare.classList.add("black-square");
+
+      // Créez l'icône de la corbeille
       let trashIcon = document.createElement("i");
       trashIcon.classList.add("fa", "fa-solid", "fa-trash-can");
       trashIcon.id = `trash-${index}`; // Utilisation de l'index comme identifiant unique pour chaque icône de corbeille
+
+      // Ajoutez un événement de suppression au clic sur l'icône
       trashIcon.addEventListener("click", (event) => {
         event.preventDefault(); // Empêche le rechargement de la page lors de la suppression
         deleteProject(photo.id);
       });
-      imageContainer.appendChild(trashIcon); // Ajoutez l'icône au conteneur
 
-      modalContent.appendChild(imageContainer); // Ajoutez le conteneur à la modal
+      // Ajoutez l'icône à l'intérieur du carré noir
+      blackSquare.appendChild(trashIcon);
+
+      // Ajoutez le carré noir au conteneur de l'image
+      imageContainer.appendChild(blackSquare);
+
+      // Ajoutez le conteneur de l'image (avec le carré noir et l'icône) à la modal
+      modalContent.appendChild(imageContainer);
     });
 
     async function deleteProject(projectId) {
