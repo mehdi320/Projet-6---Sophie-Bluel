@@ -120,6 +120,7 @@ body {
 	line-height: 1;
 }
 
+
 ol,
 ul {
 	list-style: none;
@@ -565,6 +566,7 @@ footer nav ul {
 	/* Moins élevé que le modal */
 }
 
+
 .modal-close {
 	position: absolute;
 	top: 10px;
@@ -591,9 +593,6 @@ footer nav ul {
 	width: 78.123px;
 	margin: 5px;
 }
-
-
-
 
 
 .modal-content .image-container .fa-trash-can {

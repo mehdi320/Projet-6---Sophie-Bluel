@@ -151,16 +151,19 @@ async function openModal(token) {
     }
 
     // Affichez le backdrop
-    document.getElementById("modalBackdrop").style.display = "block"; // Montre le backdrop
+    modalBackdrop.style.display = "block"; // Montre le backdrop
 
     // Ouvrez la modal
     modal.style.display = "block";
 
-    // Fermez la modal lorsque l'utilisateur clique sur le bouton "Fermer"
-    let closeButton = document.createElement("span");
-    closeButton.classList.add("modal-close");
-    closeButton.innerHTML = "&times;"; // Ajoute la croix
-    modal.appendChild(closeButton); // Ajoute le bouton de fermeture dans la modal
+    // Ajoute la croix à la modal si elle n'existe pas déjà
+    let closeButton = modal.querySelector(".modal-close");
+    if (!closeButton) {
+      closeButton = document.createElement("span");
+      closeButton.classList.add("modal-close");
+      closeButton.innerHTML = "&times;"; // Ajoute la croix
+      modal.appendChild(closeButton); // Ajoute le bouton de fermeture dans la modal
+    }
 
     // Ajouter un événement click pour fermer la modal
     closeButton.addEventListener("click", () => {
@@ -180,66 +183,46 @@ function closeModal() {
   modalBackdrop.style.display = "none"; // Cache le backdrop
 }
 
+// Fonction pour fermer la seconde modal
+function closeSecondModal() {
+  let secondModal = document.getElementById("secondModal");
+  let modalBackdrop = document.getElementById("modalBackdrop");
+
+  secondModal.style.display = "none"; // Cache la seconde modal
+  modalBackdrop.style.display = "none"; // Cache le backdrop
+}
+
 // Fonction principale pour gérer les clics sur les modals
 function handleModalClick() {
-  // Vérifie d'abord si on est sur la page login
-  if (window.location.pathname === "/login") {
-    // On ne fait rien si on est sur la page login (pas de gestion de la modal ici)
-    return;
-  }
-
-  // Si on n'est pas sur la page login, on ajoute l'événement pour les clics
   window.addEventListener("click", (event) => {
-    // Vérifie si la modal 'myModal' existe dans le DOM
     let modal = document.getElementById("myModal");
-    if (modal) {
-      let modalContent = modal.querySelector(".modal-content");
-      let modalBackdrop = document.getElementById("modalBackdrop");
+    let secondModal = document.getElementById("secondModal");
+    let modalBackdrop = document.getElementById("modalBackdrop");
 
-      // Vérifie si modalContent et modalBackdrop existent avant de procéder
-      if (modalContent && modalBackdrop) {
-        // Si on clique en dehors de la modal et sur l'arrière-plan, on ferme la modal
-        if (
-          !modalContent.contains(event.target) &&
-          event.target === modalBackdrop
-        ) {
-          closeModal(); // Cache la modal
-        }
-      } else {
-        console.error("Modal content ou modalBackdrop non trouvé.");
-      }
-    } else {
-      console.log("Aucune modal 'myModal' trouvée, pas de gestion à faire.");
+    // Fermeture de la première modal en cliquant sur le backdrop
+    if (
+      modal &&
+      modalBackdrop &&
+      !modal.contains(event.target) &&
+      event.target === modalBackdrop
+    ) {
+      closeModal();
     }
 
-    // Vérifie également si la modal 'secondModal' existe
-    let secondModal = document.getElementById("secondModal");
-    if (secondModal) {
-      let modalBackdrop = document.getElementById("modalBackdrop");
-
-      // Si le bouton 'addButton' existe, on peut gérer les clics
-      let addButton = document.getElementById("addButton");
-      if (addButton) {
-        // Gérer le clic sur 'addButton' ici
-        addButton.addEventListener("click", () => {
-          if (secondModal.style.display === "none") {
-            secondModal.style.display = "block"; // Afficher la seconde modal
-          } else {
-            secondModal.style.display = "none"; // Cacher la seconde modal
-          }
-        });
-      } else {
-        console.log("Le bouton 'addButton' n'est pas présent sur cette page.");
-      }
-    } else {
-      console.log("Aucune modal 'secondModal' trouvée.");
+    // Fermeture de la seconde modal en cliquant sur le backdrop
+    if (
+      secondModal &&
+      modalBackdrop &&
+      !secondModal.contains(event.target) &&
+      event.target === modalBackdrop
+    ) {
+      closeSecondModal();
     }
   });
 }
 
-// Appeler la fonction pour gérer l'événement de clic
+// Appeler cette fonction pour gérer les clics sur les modals
 handleModalClick();
-
 // Attendre que le DOM soit complètement chargé avant d'ajouter les écouteurs pour le bouton 'addButton'
 document.addEventListener("DOMContentLoaded", () => {
   // Vérifier d'abord si on est sur la page login
