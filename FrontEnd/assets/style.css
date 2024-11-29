@@ -351,7 +351,7 @@ footer nav ul {
 	display: grid;
 	justify-content: center;
 	margin-top: 20px;
-	margin-bottom: 350px;
+	margin-bottom: 80px;
 }
 
 .label {
@@ -427,7 +427,6 @@ footer nav ul {
 }
 
 .filters {
-	width: 198px;
 	height: 37px;
 	border-radius: 60px;
 	border: 1px solid #1D6154;
@@ -436,6 +435,7 @@ footer nav ul {
 	font-family: Syne;
 	font-size: 16px;
 	color: #1D6154;
+	padding: 9px 30px;
 }
 
 .selected {
@@ -598,8 +598,9 @@ footer nav ul {
 
 .modal-content .image-container .fa-trash-can {
 	position: absolute;
-	top: 12%;
-	right: 5%;
+	top: 13%;
+	right: 6%;
+	left: 6%;
 	color: white;
 	font-size: 11px;
 	display: flex;
@@ -607,6 +608,19 @@ footer nav ul {
 	align-items: center;
 }
 
+
+.black-square {
+	position: absolute;
+	background-color: black;
+	height: 15px;
+	width: 15px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	top: 6%;
+	right: 6%;
+	z-index: 1;
+}
 
 .modal-content .icon-container {
 	position: relative;
@@ -618,13 +632,7 @@ footer nav ul {
 	height: 15px;
 }
 
-.modal-content .image-container .fa-trash-can::before {
-	position: absolute;
-	background-color: black;
-	height: 15px;
-	width: 15px;
-	transform: translate(-70%, -60%);
-}
+
 
 
 .modal-content img {
